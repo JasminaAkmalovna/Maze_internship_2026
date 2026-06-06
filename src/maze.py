@@ -25,3 +25,11 @@ class Maze:
             neighbors.append(self.grid[row][col + 1])
 
         return neighbors
+    def remove_wall_between(self, cell1, cell2):
+        if cell1.row == cell2.row:
+            if cell1.col < cell2.col:
+                cell1.east_wall = False
+                cell2.west_wall = False
+            else:
+                cell1.west_wall = False
+                cell2.east_wall = False
