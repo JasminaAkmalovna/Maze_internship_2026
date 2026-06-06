@@ -18,5 +18,11 @@ class TestMaze(unittest.TestCase):
         maze = Maze(2, 3)
 
         self.assertIsInstance(maze.grid[0][0], Cell)
+    def test_top_left_cell_has_two_neighbors(self):
+        maze = Maze(3, 3)
+
+        neighbors = maze.get_neighbors(0, 0)
+
+        self.assertEqual(len(neighbors), 2)
 if __name__ == "__main__":
     unittest.main()

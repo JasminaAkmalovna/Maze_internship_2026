@@ -18,5 +18,12 @@ class TestCell(unittest.TestCase):
         self.assertTrue(cell.south_wall)
         self.assertTrue(cell.east_wall)
         self.assertTrue(cell.west_wall)
+    def test_can_remove_north_wall(self):
+
+        cell = Cell(0, 0)
+
+        cell.north_wall = False
+
+        self.assertFalse(cell.north_wall)
 if __name__ == "__main__":
     unittest.main()
