@@ -71,20 +71,48 @@ class Maze:
 
     def render(self):
         output = ""
-        # Check if start is at top-left with an open west wall to adjust the top-left corner look
-        output += "+" + "---+" * self.cols + "\n"
+        # Render top outer ceiling border
+        output += "┏" + "━━━┳" * (self.cols - 1) + "━━━┓\n"
 
-        for row in self.grid:
-            # Change the hardcoded starting '|' to respect the cell's west_wall status
-            top = " " if not row[0].west_wall else "|"
-            bottom = "+"
-
-            for cell in row:
-                top += "   " if not cell.east_wall else "   |"
-                bottom += "---+" if cell.south_wall else "   +"
+        for r in range(self.rows):
+            row = self.grid[r]
+            # Left outer entry wall marker (respects start room path)
+            top = " " if not row[0].west_wall else "┃"
             
+            # Bottom intersection line starts with a left junction or corner
+            if r == self.rows - 1:
+                bottom = "┗"
+            else:
+                bottom = "┣"
+
+            for c in range(self.cols):
+                cell = row[c]
+                
+                # 1. Build out the path body cavity space and East walls
+                if cell.east_wall:
+                    # End cell right-hand exit point check
+                    if r == self.rows - 1 and c == self.cols - 1:
+                        top += "    "
+                    else:
+                        top += "   ┃"
+                else:
+                    top += "    "
+
+                # 2. Build out floor dividers and intersection cross segments
+                if r == self.rows - 1:
+                    # Last row bottom floor caps
+                    bottom += "━━━┛" if c == self.cols - 1 else "━━━┻"
+                else:
+                    # Intermediate rows use structural cross elements
+                    if cell.south_wall:
+                        bottom += "━━━┫" if c == self.cols - 1 else "━━━╋"
+                    else:
+                        bottom += "   ┫" if c == self.cols - 1 else "   ╋"
+
             output += top + "\n"
-            output += bottom + "\n"
+            if r < self.rows - 1 or any(cell.south_wall for cell in row):
+                output += bottom + "\n"
+                
         return output
     def reset_visited(self):
         for row in self.grid:

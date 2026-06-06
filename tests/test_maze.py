@@ -147,5 +147,14 @@ class TestMaze(unittest.TestCase):
         self.assertFalse(maze.start.west_wall)
         # The end cell (bottom-right) should have its east wall removed
         self.assertFalse(maze.end.east_wall)
+
+    def test_maze_renders_with_unicode_box_elements(self):
+        maze = Maze(2, 2)
+        maze.generate()
+        output = maze.render()
+        
+        # Ensure old punctuation elements are completely replaced by clean box symbols
+        self.assertNotIn("+", output)
+        self.assertNotIn("-", output)
 if __name__ == "__main__":
     unittest.main()
