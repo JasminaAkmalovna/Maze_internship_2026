@@ -123,7 +123,7 @@ class TestMaze(unittest.TestCase):
         for row in maze.grid:
             for cell in row:
                 self.assertFalse(cell.visited)
-                
+
     def test_generation_creates_walls_inside_maze(self):
         # A 5x5 maze should have internal walls left standing, not be completely empty
         maze = Maze(5, 5)
@@ -139,5 +139,13 @@ class TestMaze(unittest.TestCase):
                     
         # If it's a real maze, some internal walls must still exist
         self.assertGreater(internal_walls_count, 0)
+    def test_generate_opens_start_and_end_outer_walls(self):
+        maze = Maze(3, 3)
+        maze.generate()
+
+        # The start cell (top-left) should have its west wall removed
+        self.assertFalse(maze.start.west_wall)
+        # The end cell (bottom-right) should have its east wall removed
+        self.assertFalse(maze.end.east_wall)
 if __name__ == "__main__":
     unittest.main()

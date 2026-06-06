@@ -52,6 +52,10 @@ class Maze:
     def generate(self):
         start = self.grid[0][0]
         self._dfs_generate(start)
+        
+        # Open outer walls for start and end points
+        self.start.west_wall = False
+        self.end.east_wall = False
     
     def _dfs_generate(self, cell):
         cell.visited = True
@@ -67,11 +71,14 @@ class Maze:
 
     def render(self):
         output = ""
+        # Check if start is at top-left with an open west wall to adjust the top-left corner look
         output += "+" + "---+" * self.cols + "\n"
 
         for row in self.grid:
-            top = "|"
+            # Change the hardcoded starting '|' to respect the cell's west_wall status
+            top = " " if not row[0].west_wall else "|"
             bottom = "+"
+
             for cell in row:
                 top += "   " if not cell.east_wall else "   |"
                 bottom += "---+" if cell.south_wall else "   +"
@@ -79,7 +86,6 @@ class Maze:
             output += top + "\n"
             output += bottom + "\n"
         return output
-      
     def reset_visited(self):
         for row in self.grid:
             for cell in row:
