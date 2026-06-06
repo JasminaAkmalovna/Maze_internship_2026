@@ -60,5 +60,19 @@ class TestMaze(unittest.TestCase):
         maze.generate()
 
         self.assertTrue(maze.grid[0][0].visited)
+
+    def test_generation_visits_more_than_one_cell(self):
+        maze = Maze(2, 2)
+
+        maze.generate()
+
+        visited_count = 0
+
+        for row in maze.grid:
+            for cell in row:
+                if cell.visited:
+                    visited_count += 1
+
+        self.assertGreater(visited_count, 1)
 if __name__ == "__main__":
     unittest.main()
