@@ -46,13 +46,13 @@ class Maze:
         return [n for n in neighbors if not n.visited]
     def generate(self):
         start = self.grid[0][0]
-        start.visited = True
+        self._dfs_generate(start)
+    
+    def _dfs_generate(self, cell):
+        cell.visited = True
 
-        neighbors = self.get_neighbors(0, 0)
+        neighbors = self.get_unvisited_neighbors(cell)
 
-        if neighbors:
-            next_cell = neighbors[0]
-
-            self.remove_wall_between(start, next_cell)
-
-            next_cell.visited = True
+        for neighbor in neighbors:
+            self.remove_wall_between(cell, neighbor)
+            self._dfs_generate(neighbor)

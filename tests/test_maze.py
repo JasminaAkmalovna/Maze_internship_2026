@@ -90,5 +90,13 @@ class TestMaze(unittest.TestCase):
         )
 
         self.assertTrue(wall_removed)
+    def test_generation_visits_all_cells(self):
+        maze = Maze(3, 3)
+
+        maze.generate()
+
+        for row in maze.grid:
+            for cell in row:
+                self.assertTrue(cell.visited)
 if __name__ == "__main__":
     unittest.main()
