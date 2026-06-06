@@ -98,5 +98,14 @@ class TestMaze(unittest.TestCase):
         for row in maze.grid:
             for cell in row:
                 self.assertTrue(cell.visited)
+
+    def test_maze_can_render_as_string(self):
+        maze = Maze(2, 2)
+        maze.generate()
+
+        output = maze.render()
+
+        self.assertIsInstance(output, str)
+        self.assertTrue(len(output) > 0)
 if __name__ == "__main__":
     unittest.main()

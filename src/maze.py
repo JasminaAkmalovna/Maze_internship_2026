@@ -56,3 +56,5 @@ class Maze:
         for neighbor in neighbors:
             self.remove_wall_between(cell, neighbor)
             self._dfs_generate(neighbor)
+    def render(self):
+        return "maze"
