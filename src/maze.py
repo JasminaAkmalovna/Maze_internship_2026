@@ -77,6 +77,9 @@ class Maze:
 
             output += top + "\n"
             output += bottom + "\n"
-
         return output
+    def reset_visited(self):
+        for row in self.grid:
+            for cell in row:
+                cell.visited = False
     

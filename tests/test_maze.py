@@ -113,5 +113,15 @@ class TestMaze(unittest.TestCase):
 
         self.assertIsNotNone(maze.start)
         self.assertIsNotNone(maze.end)
+        
+    def test_maze_can_reset_visited(self):
+        maze = Maze(2, 2)
+        maze.generate()
+
+        maze.reset_visited()
+
+        for row in maze.grid:
+            for cell in row:
+                self.assertFalse(cell.visited)
 if __name__ == "__main__":
     unittest.main()
