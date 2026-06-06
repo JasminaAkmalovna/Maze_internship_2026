@@ -45,7 +45,7 @@ class TestMaze(unittest.TestCase):
 
         self.assertFalse(top.south_wall)
         self.assertFalse(bottom.north_wall)
-        
+
     def test_get_unvisited_neighbors(self):
         maze = Maze(2, 2)
 
@@ -54,5 +54,11 @@ class TestMaze(unittest.TestCase):
         neighbors = maze.get_unvisited_neighbors(cell)
 
         self.assertEqual(len(neighbors), 2)
+    def test_generate_marks_start_cell_visited(self):
+        maze = Maze(2, 2)
+
+        maze.generate()
+
+        self.assertTrue(maze.grid[0][0].visited)
 if __name__ == "__main__":
     unittest.main()

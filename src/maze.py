@@ -44,3 +44,5 @@ class Maze:
         neighbors = self.get_neighbors(cell.row, cell.col)
 
         return [n for n in neighbors if not n.visited]
+    def generate(self):
+        self.grid[0][0].visited = True
