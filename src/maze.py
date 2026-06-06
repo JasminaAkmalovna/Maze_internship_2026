@@ -1,3 +1,4 @@
+import random
 from src.cell import Cell
 
 class Maze:
@@ -54,32 +55,34 @@ class Maze:
     
     def _dfs_generate(self, cell):
         cell.visited = True
-
-        neighbors = self.get_unvisited_neighbors(cell)
-
-        for neighbor in neighbors:
+        
+        while True:
+            unvisited = self.get_unvisited_neighbors(cell)
+            if not unvisited:
+                break
+            
+            neighbor = random.choice(unvisited)
             self.remove_wall_between(cell, neighbor)
             self._dfs_generate(neighbor)
+
     def render(self):
         output = ""
-
-        # top border
         output += "+" + "---+" * self.cols + "\n"
 
         for row in self.grid:
             top = "|"
             bottom = "+"
-
             for cell in row:
                 top += "   " if not cell.east_wall else "   |"
-
                 bottom += "---+" if cell.south_wall else "   +"
-
+            
             output += top + "\n"
             output += bottom + "\n"
         return output
+      
     def reset_visited(self):
         for row in self.grid:
             for cell in row:
                 cell.visited = False
+
     
