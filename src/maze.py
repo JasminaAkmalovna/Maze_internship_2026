@@ -1,6 +1,7 @@
 from src.cell import Cell
 
 class Maze:
+        
     def __init__(self, rows, cols):
         self.rows = rows
         self.cols = cols
@@ -9,6 +10,9 @@ class Maze:
             [Cell(r, c) for c in range(cols)]
             for r in range(rows)
         ]
+
+        self.start = self.grid[0][0]
+        self.end = self.grid[self.rows - 1][self.cols - 1]
     def get_neighbors(self, row, col):
         neighbors = []
 
@@ -75,4 +79,4 @@ class Maze:
             output += bottom + "\n"
 
         return output
-        
+    

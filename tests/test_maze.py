@@ -107,5 +107,11 @@ class TestMaze(unittest.TestCase):
 
         self.assertIsInstance(output, str)
         self.assertTrue(len(output) > 0)
+    
+    def test_maze_has_start_and_end(self):
+        maze = Maze(3, 3)
+
+        self.assertIsNotNone(maze.start)
+        self.assertIsNotNone(maze.end)
 if __name__ == "__main__":
     unittest.main()
