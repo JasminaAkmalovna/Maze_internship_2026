@@ -33,3 +33,14 @@ class Maze:
             else:
                 cell1.west_wall = False
                 cell2.east_wall = False
+        elif cell1.col == cell2.col:
+            if cell1.row < cell2.row:
+                cell1.south_wall = False
+                cell2.north_wall = False
+            else:
+                cell1.north_wall = False
+                cell2.south_wall = False
+    def get_unvisited_neighbors(self, cell):
+        neighbors = self.get_neighbors(cell.row, cell.col)
+
+        return [n for n in neighbors if not n.visited]

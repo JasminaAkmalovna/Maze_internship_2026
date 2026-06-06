@@ -34,5 +34,25 @@ class TestMaze(unittest.TestCase):
 
         self.assertFalse(left.east_wall)
         self.assertFalse(right.west_wall)
+
+    def test_remove_wall_between_vertical_neighbors(self):
+        maze = Maze(2, 1)
+
+        top = maze.grid[0][0]
+        bottom = maze.grid[1][0]
+
+        maze.remove_wall_between(top, bottom)
+
+        self.assertFalse(top.south_wall)
+        self.assertFalse(bottom.north_wall)
+        
+    def test_get_unvisited_neighbors(self):
+        maze = Maze(2, 2)
+
+        cell = maze.grid[0][0]
+
+        neighbors = maze.get_unvisited_neighbors(cell)
+
+        self.assertEqual(len(neighbors), 2)
 if __name__ == "__main__":
     unittest.main()
