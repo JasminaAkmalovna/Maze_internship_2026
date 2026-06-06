@@ -57,4 +57,22 @@ class Maze:
             self.remove_wall_between(cell, neighbor)
             self._dfs_generate(neighbor)
     def render(self):
-        return "maze"
+        output = ""
+
+        # top border
+        output += "+" + "---+" * self.cols + "\n"
+
+        for row in self.grid:
+            top = "|"
+            bottom = "+"
+
+            for cell in row:
+                top += "   " if not cell.east_wall else "   |"
+
+                bottom += "---+" if cell.south_wall else "   +"
+
+            output += top + "\n"
+            output += bottom + "\n"
+
+        return output
+        
