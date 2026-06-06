@@ -74,5 +74,21 @@ class TestMaze(unittest.TestCase):
                     visited_count += 1
 
         self.assertGreater(visited_count, 1)
+    
+    def test_generation_removes_a_wall(self):
+        maze = Maze(2, 2)
+
+        maze.generate()
+
+        start = maze.grid[0][0]
+
+        wall_removed = (
+            not start.north_wall or
+            not start.south_wall or
+            not start.east_wall or
+            not start.west_wall
+        )
+
+        self.assertTrue(wall_removed)
 if __name__ == "__main__":
     unittest.main()

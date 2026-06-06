@@ -45,9 +45,14 @@ class Maze:
 
         return [n for n in neighbors if not n.visited]
     def generate(self):
-        self.grid[0][0].visited = True
+        start = self.grid[0][0]
+        start.visited = True
 
         neighbors = self.get_neighbors(0, 0)
 
         if neighbors:
-            neighbors[0].visited = True
+            next_cell = neighbors[0]
+
+            self.remove_wall_between(start, next_cell)
+
+            next_cell.visited = True
