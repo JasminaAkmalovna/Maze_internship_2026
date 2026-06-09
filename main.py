@@ -3,6 +3,36 @@ import os
 import time
 from src.maze import Maze
 from src.solver import Solver
+def generate_smooth_frames(history):
+    """
+    Calculates step-by-step backtracking frames between solver states
+    so the cursor physically walks backward out of dead ends.
+    """
+    smooth_history = []
+    all_visited = set()
+    current_path = []
+
+    for _, active_path in history:
+        common_len = 0
+        for i in range(min(len(current_path), len(active_path))):
+            if current_path[i] == active_path[i]:
+                common_len += 1
+            else:
+                break
+        
+        # Shrink step-by-step to the fork point (Backtracking)
+        while len(current_path) > common_len:
+            popped = current_path.pop()
+            all_visited.add(popped)
+            smooth_history.append((set(all_visited), list(current_path)))
+        
+        # Grow step-by-step down the new hall (Exploring)
+        for i in range(common_len, len(active_path)):
+            current_path.append(active_path[i])
+            all_visited.add(active_path[i])
+            smooth_history.append((set(all_visited), list(current_path)))
+            
+    return smooth_history
 
 def animate_search_process(maze, history, speed_delay):
     """
