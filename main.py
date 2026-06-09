@@ -1,71 +1,7 @@
 # main.py
-import os
-import time
 from src.maze import Maze
 from src.solver import Solver
-def generate_smooth_frames(history):
-    """
-    Calculates step-by-step backtracking frames between solver states
-    so the cursor physically walks backward out of dead ends.
-    """
-    smooth_history = []
-    all_visited = set()
-    current_path = []
-
-    for _, active_path in history:
-        common_len = 0
-        for i in range(min(len(current_path), len(active_path))):
-            if current_path[i] == active_path[i]:
-                common_len += 1
-            else:
-                break
-        
-        # Shrink step-by-step to the fork point (Backtracking)
-        while len(current_path) > common_len:
-            popped = current_path.pop()
-            all_visited.add(popped)
-            smooth_history.append((set(all_visited), list(current_path)))
-        
-        # Grow step-by-step down the new hall (Exploring)
-        for i in range(common_len, len(active_path)):
-            current_path.append(active_path[i])
-            all_visited.add(active_path[i])
-            smooth_history.append((set(all_visited), list(current_path)))
-            
-    return smooth_history
-
-def animate_search_process(maze, history, speed_delay):
-    """
-    Animates the full procedural search process frame-by-frame with dynamic speed.
-    """
-    base_render = maze.render()
-    GREEN_DOT = "\033[92m•\033[0m"
-    RED_DOT   = "\033[91m•\033[0m"
-
-    for visited_coords, active_path in history:
-        lines = base_render.split('\n')
-        active_set = set(active_path)
-
-        for line_idx in range(len(lines)):
-            if line_idx % 2 == 1:
-                r = (line_idx - 1) // 2
-                line_list = list(lines[line_idx])
-                
-                for c in range(maze.cols):
-                    char_idx = 2 + 4 * c
-                    if (r, c) in active_set:
-                        line_list[char_idx] = GREEN_DOT
-                    elif (r, c) in visited_coords:
-                        line_list[char_idx] = RED_DOT
-                        
-                lines[line_idx] = "".join(line_list)
-
-        os.system('clear' if os.name != 'nt' else 'cls')
-        print("Welcome to the Procedural Labyrinth Generator!")
-        print("---------------------------------------------")
-        print(f"VISUALIZATION KEY: {GREEN_DOT} Active Path  {RED_DOT} Visited/Dead End")
-        print("\n" + "\n".join(lines))
-        time.sleep(speed_delay)
+from src.ui import generate_smooth_frames, animate_search_process
 
 def main():
     print("Welcome to the Procedural Labyrinth Generator!")
@@ -78,14 +14,14 @@ def main():
         print("Invalid number entered. Defaulting to 10x15.")
         height, width = 10, 15
 
-    # Ask user for preferred speed
     print("\nChoose Animation Speed:")
     print("1. Slow")
     print("2. Medium")
     print("3. Fast")
     speed_choice = input("Enter 1, 2, or 3 [Default: 2]: ")
-    speed_map = {"1": 0.3, "2": 0.12, "3": 0.04}
-    speed_delay = speed_map.get(speed_choice, 0.12)
+    
+    speed_map = {"1": (0.3, "SLOW"), "2": (0.12, "MED"), "3": (0.04, "FAST")}
+    speed_delay, speed_name = speed_map.get(speed_choice, (0.12, "MED"))
 
     print("\nChoose your pathfinding algorithm:")
     print("1. DFS (Depth-First Search)")
@@ -104,12 +40,14 @@ def main():
     path, history = solver.solve(return_history=True)
     
     if history:
-        # Transform the raw jumps into smooth physical steps
         print("Calculating smooth backtracking trajectory frames...")
         smooth_frames = generate_smooth_frames(history)
-        
-        # Pass the smooth_frames into the animation engine
-        animate_search_process(maze, smooth_frames, speed_delay)
+        animate_search_process(maze, smooth_frames, speed_delay, speed_name)
         print(f"\nTarget path secured using {selected_algo.upper()} in {len(path)} active steps.")
+    else:
+        print("\n--- GENERATED TERMINAL MAZE ---")
+        print(maze.render())
+        print("\nNo structural path resolved.")
+
 if __name__ == "__main__":
     main()
