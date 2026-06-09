@@ -104,12 +104,12 @@ def main():
     path, history = solver.solve(return_history=True)
     
     if history:
-        animate_search_process(maze, history, speed_delay)
+        # Transform the raw jumps into smooth physical steps
+        print("Calculating smooth backtracking trajectory frames...")
+        smooth_frames = generate_smooth_frames(history)
+        
+        # Pass the smooth_frames into the animation engine
+        animate_search_process(maze, smooth_frames, speed_delay)
         print(f"\nTarget path secured using {selected_algo.upper()} in {len(path)} active steps.")
-    else:
-        print("\n--- GENERATED TERMINAL MAZE ---")
-        print(maze.render())
-        print("\nNo structural path resolved.")
-
 if __name__ == "__main__":
     main()
