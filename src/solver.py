@@ -6,16 +6,15 @@ class Solver:
         self.maze = maze
         self.algorithm = algorithm.lower()
 
-    def solve(self):
+    def solve(self, return_history=False):
         if self.algorithm == "bfs":
-            return self._solve_bfs()
+            return self._solve_bfs(return_history)
         elif self.algorithm == "astar":
-            return self._solve_astar()
+            return self._solve_astar(return_history)
         else:
-            return self._solve_dfs() # Default to DFS
+            return self._solve_dfs(return_history)
 
     def _get_valid_neighbors(self, cell):
-        """Helper method to clean up our algorithms"""
         neighbors = []
         r, c = cell.row, cell.col
         
@@ -30,68 +29,77 @@ class Solver:
             
         return neighbors
 
-    def _solve_dfs(self):
+    def _solve_dfs(self, return_history):
         stack = [(self.maze.start, [(self.maze.start.row, self.maze.start.col)])]
         visited = set()
+        history = []
 
         while stack:
-            current_cell, path = stack.pop() # Pop from end (Stack)
-
-            if current_cell == self.maze.end:
-                return path
+            current_cell, path = stack.pop()
 
             if current_cell in visited:
                 continue
             visited.add(current_cell)
+
+            if return_history:
+                # Snapshot: (all visited coords up to now, current active path)
+                history.append(({(c.row, c.col) for c in visited}, list(path)))
+
+            if current_cell == self.maze.end:
+                return (path, history) if return_history else path
 
             for neighbor in self._get_valid_neighbors(current_cell):
                 stack.append((neighbor, path + [(neighbor.row, neighbor.col)]))
-        return []
+        return ([], history) if return_history else []
 
-    def _solve_bfs(self):
+    def _solve_bfs(self, return_history):
         queue = [(self.maze.start, [(self.maze.start.row, self.maze.start.col)])]
         visited = set()
+        history = []
 
         while queue:
-            current_cell, path = queue.pop(0) # Pop from front (Queue)
-
-            if current_cell == self.maze.end:
-                return path
+            current_cell, path = queue.pop(0)
 
             if current_cell in visited:
                 continue
             visited.add(current_cell)
 
+            if return_history:
+                history.append(({(c.row, c.col) for c in visited}, list(path)))
+
+            if current_cell == self.maze.end:
+                return (path, history) if return_history else path
+
             for neighbor in self._get_valid_neighbors(current_cell):
                 queue.append((neighbor, path + [(neighbor.row, neighbor.col)]))
-        return []
+        return ([], history) if return_history else []
 
-    def _solve_astar(self):
-        # A* uses a priority queue based on: f_score = distance_traveled + estimated_distance_to_end
+    def _solve_astar(self, return_history):
         def heuristic(cell):
-            # Manhattan distance (rows away + cols away)
             return abs(cell.row - self.maze.end.row) + abs(cell.col - self.maze.end.col)
 
-        count = 0 # Tie-breaker for the priority queue
-        # Queue stores: (f_score, count, current_cell, path)
+        count = 0
         queue = [(0, count, self.maze.start, [(self.maze.start.row, self.maze.start.col)])]
         visited = set()
+        history = []
 
         while queue:
             _, _, current_cell, path = heapq.heappop(queue)
 
-            if current_cell == self.maze.end:
-                return path
-
             if current_cell in visited:
                 continue
             visited.add(current_cell)
 
+            if return_history:
+                history.append(({(c.row, c.col) for c in visited}, list(path)))
+
+            if current_cell == self.maze.end:
+                return (path, history) if return_history else path
+
             for neighbor in self._get_valid_neighbors(current_cell):
-                g_score = len(path) # Distance traveled so far
-                h_score = heuristic(neighbor) # Guess to the end
+                g_score = len(path)
+                h_score = heuristic(neighbor)
                 f_score = g_score + h_score
-                
                 count += 1
                 heapq.heappush(queue, (f_score, count, neighbor, path + [(neighbor.row, neighbor.col)]))
-        return []
+        return ([], history) if return_history else []
