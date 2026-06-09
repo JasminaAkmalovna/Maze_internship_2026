@@ -34,6 +34,10 @@ class Solver:
         visited = set()
         history = []
 
+        # Manhattan distance heuristic helper to pull the search toward the exit
+        def distance_to_end(cell):
+            return abs(cell.row - self.maze.end.row) + abs(cell.col - self.maze.end.col)
+
         while stack:
             current_cell, path = stack.pop()
 
@@ -42,13 +46,18 @@ class Solver:
             visited.add(current_cell)
 
             if return_history:
-                # Snapshot: (all visited coords up to now, current active path)
                 history.append(({(c.row, c.col) for c in visited}, list(path)))
 
             if current_cell == self.maze.end:
                 return (path, history) if return_history else path
 
-            for neighbor in self._get_valid_neighbors(current_cell):
+            # OPTIMIZATION: Fetch neighbors and sort them by distance to the end.
+            # Since stack is Last-In, First-Out (LIFO), reversing the sort puts the 
+            # neighbor CLOSEST to the exit on TOP of the stack to be processed first.
+            neighbors = self._get_valid_neighbors(current_cell)
+            neighbors.sort(key=distance_to_end, reverse=True)
+
+            for neighbor in neighbors:
                 stack.append((neighbor, path + [(neighbor.row, neighbor.col)]))
         return ([], history) if return_history else []
 
