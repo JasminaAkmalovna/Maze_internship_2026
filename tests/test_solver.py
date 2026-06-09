@@ -12,15 +12,20 @@ class TestSolver(unittest.TestCase):
         
         self.assertEqual(solver.maze, maze)
 
-    def test_solver_finds_correct_path_on_2x2(self):
+    def test_algorithms_find_correct_path(self):
         maze = get_simple_2x2_maze()
-        solver = Solver(maze)
         
-        path = solver.solve()
+        # Test DFS
+        dfs_solver = Solver(maze, algorithm="dfs")
+        self.assertEqual(dfs_solver.solve(), [(0, 0), (0, 1), (1, 1)])
+
+        # Test BFS
+        bfs_solver = Solver(maze, algorithm="bfs")
+        self.assertEqual(bfs_solver.solve(), [(0, 0), (0, 1), (1, 1)])
         
-        # We know the path must be these exact coordinates
-        expected_path = [(0, 0), (0, 1), (1, 1)] 
-        self.assertEqual(path, expected_path)
+        # Test A*
+        astar_solver = Solver(maze, algorithm="astar")
+        self.assertEqual(astar_solver.solve(), [(0, 0), (0, 1), (1, 1)])
     
     
     def test_solver_returns_empty_list_when_unsolvable(self):
