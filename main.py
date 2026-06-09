@@ -4,11 +4,9 @@ import time
 from src.maze import Maze
 from src.solver import Solver
 
-def animate_search_process(maze, history):
+def animate_search_process(maze, history, speed_delay):
     """
-    Animates the full procedural search process frame-by-frame.
-    Green = Current path being explored.
-    Red   = Backtracked dead-ends/visited paths.
+    Animates the full procedural search process frame-by-frame with dynamic speed.
     """
     base_render = maze.render()
     GREEN_DOT = "\033[92m•\033[0m"
@@ -37,19 +35,27 @@ def animate_search_process(maze, history):
         print("---------------------------------------------")
         print(f"VISUALIZATION KEY: {GREEN_DOT} Active Path  {RED_DOT} Visited/Dead End")
         print("\n" + "\n".join(lines))
-        time.sleep(0.08)
+        time.sleep(speed_delay)
 
 def main():
     print("Welcome to the Procedural Labyrinth Generator!")
     print("---------------------------------------------")
     
-    # Ask user for custom dimensions
     try:
         height = int(input("Enter maze height/rows (e.g., 10): ") or 10)
         width = int(input("Enter maze width/columns (e.g., 15): ") or 15)
     except ValueError:
         print("Invalid number entered. Defaulting to 10x15.")
         height, width = 10, 15
+
+    # Ask user for preferred speed
+    print("\nChoose Animation Speed:")
+    print("1. Slow")
+    print("2. Medium")
+    print("3. Fast")
+    speed_choice = input("Enter 1, 2, or 3 [Default: 2]: ")
+    speed_map = {"1": 0.3, "2": 0.12, "3": 0.04}
+    speed_delay = speed_map.get(speed_choice, 0.12)
 
     print("\nChoose your pathfinding algorithm:")
     print("1. DFS (Depth-First Search)")
@@ -68,7 +74,7 @@ def main():
     path, history = solver.solve(return_history=True)
     
     if history:
-        animate_search_process(maze, history)
+        animate_search_process(maze, history, speed_delay)
         print(f"\nTarget path secured using {selected_algo.upper()} in {len(path)} active steps.")
     else:
         print("\n--- GENERATED TERMINAL MAZE ---")
