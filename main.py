@@ -13,17 +13,22 @@ def main():
     print("2. Load Maze from a Text File")
     mode = input("Select an option (1-2) [Default: 1]: ").strip()
 
+    # main.py (Updated Loading Block)
     if mode == "2":
-        # Ask user for the specific map file they want to play
         filename = input("Enter maze filename (e.g., maze_spiral.txt) [Default: maze.txt]: ").strip() or "maze.txt"
         
         if not os.path.exists(filename):
             print(f"❌ '{filename}' not found! Falling back to random generation.")
             mode = "1"
         else:
-            print(f"📂 Loading '{filename}' layout...")
-            maze = load_maze_from_file(filename)
-
+            try:
+                print(f"📂 Loading '{filename}' layout...")
+                maze = load_maze_from_file(filename)
+            except Exception as e:
+                # Catch empty files or completely unreadable formatting safely
+                print(f"❌ Failed to parse '{filename}': {e}")
+                print("Falling back to random maze generation.")
+                mode = "1"
     if mode != "2":
         try:
             height = int(input("Enter maze height/rows (e.g., 10): ") or 10)
