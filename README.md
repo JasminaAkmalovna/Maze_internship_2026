@@ -44,7 +44,7 @@ maze-solver-project/
 
 ### Prerequisites
 
-* Make sure you have Python 3 installed.
+* Make sure you have Python 3/ Python installed.
 
 ### Run the App
 
@@ -58,7 +58,7 @@ cd Maze_internship_2026
 
 2. Start the program:
 ```bash
-python3 main.py
+python3 main.py \ python main.py
 
 ```
 
@@ -100,3 +100,39 @@ When you run the app, it will ask you to customize your run:
 > 
 
 ---
+
+## 📂 Loading Custom Mazes from Text Files
+
+The application includes a robust file parsing module that allows you to load custom hand-crafted maze environments from text files rather than relying solely on procedural generation.
+
+### 📑 File Formatting Rules
+When creating custom `.txt` maps inside the root directory, adhere to the following character mapping matrix:
+
+| Character | Description |
+| :---: | :--- |
+| `#` | **Wall Element:** Represents an impassable structural block. |
+| `S` | **Start Point:** The absolute origin cell where solvers begin calculation. |
+| `E` | **End Point:** The target destination cell. |
+| ` ` | **Open Path (Space):** Clean path tiles where agents can navigate. |
+
+#### Example Layout Map (`maze.txt`):
+```text
+###########
+#S    #   #
+##### # # #
+#   #   # #
+# ####### #
+#       #E#
+###########
+
+```
+
+### 🚀 Running a Custom Layout
+
+1. Open the suite terminal interface: `python3 main.py` or `python main.py`
+2. Select option `2` (`Load Maze from a Text File`).
+3. Provide the targeted filename when prompted (e.g., `maze_spiral.txt`).
+4. Select your preferred search algorithm execution pipeline and watch the custom canvas animate!
+
+```
+
