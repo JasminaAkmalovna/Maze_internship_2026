@@ -58,8 +58,13 @@ cd Maze_internship_2026
 
 2. Start the program:
 ```bash
-python3 main.py \ python main.py
+python3 main.py 
 
+```
+or
+
+```bash
+ python main.py
 ```
 
 
