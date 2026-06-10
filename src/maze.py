@@ -2,16 +2,18 @@ import random
 from src.cell import Cell
 
 class Maze:
-        
-    def __init__(self, rows, cols):
+    def __init__(self, rows=10, cols=15, generate=True):  # 👈 Add 'generate=True' here
         self.rows = rows
         self.cols = cols
+        self.grid = [[Cell(r, c) for c in range(cols)] for r in range(rows)]
+        self.start = None
+        self.end = None
 
-        self.grid = [
-            [Cell(r, c) for c in range(cols)]
-            for r in range(rows)
-        ]
-
+        # 👈 Wrap your generation initializer inside this if statement:
+        if generate:
+            self.start = self.grid[0][0]
+            self.end = self.grid[rows - 1][cols - 1]
+            self._generate_maze()
         self.start = self.grid[0][0]
         self.end = self.grid[self.rows - 1][self.cols - 1]
     def get_neighbors(self, row, col):
