@@ -20,22 +20,31 @@ Your project is organized into clean, dedicated folders for the game logic and a
 
 ```text
 maze-solver-project/
+├── maps/                   # Folder for maze text files
+│   ├── maze_braided.txt
+│   ├── maze_gauntlet.txt
+│   ├── maze_spiral.txt
+│   └── maze.txt
 ├── src/                    # Core logic folder
+│   ├── __pycache__/        # Compiled Python files (ignored by git)
 │   ├── __init__.py
 │   ├── cell.py             # Individual grid cells and walls
+│   ├── loader.py           # Text maze loading/parsing logic
 │   ├── maze.py             # Random maze builder
 │   ├── solver.py           # Pathfinding algorithms
 │   └── ui.py               # Terminal rendering and animations
 ├── tests/                  # Automated unit tests
+│   ├── __pycache__/        # Compiled Python files (ignored by git)
 │   ├── __init__.py
 │   ├── manual_mazes.py     # Static mazes used for debugging
 │   ├── test_cell.py        # Tests for cell properties
+│   ├── test_loader.py      # Tests for the file loader logic
 │   ├── test_maze.py        # Tests for maze walls and sizes
 │   └── test_solver.py      # Tests to ensure paths are correct
 ├── .gitignore              # Files git should ignore
 ├── main.py                 # Main file to launch the app
+├── maze_corridor.txt       # Sample custom corridor maze file (root level)
 └── README.md               # App documentation
-
 ```
 
 ---
