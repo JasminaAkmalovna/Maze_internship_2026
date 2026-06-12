@@ -59,7 +59,7 @@ maze-solver-project/
 
 1. Clone this repository to your computer:
 ```bash
-git clone https://github.com/YourUsername/Maze_internship_2026.git
+git clone https://github.com/JasminaAkmalovna/Maze_internship_2026.git
 cd Maze_internship_2026
 
 ```
